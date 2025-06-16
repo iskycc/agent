@@ -8,7 +8,7 @@ import (
 	"github.com/nezhahq/service"
 )
 
-//关闭日志尝试
+//关闭日志尝试，是否会继续调用rsyslog?
 var (
 	defaultLogger = &ServiceLogger{enabled: false, logger: service.ConsoleLogger}
 
