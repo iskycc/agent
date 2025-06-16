@@ -2,10 +2,7 @@
 
 package logger
 
-import (
-	"github.com/nezhahq/service"
-)
-
-func NewNezhaServiceLogger(s service.Service, errs chan<- error) (service.Logger, error) {
-	return s.Logger(errs)
+func NewNezhaServiceLogger(s interface{}, errs chan<- error) (interface{}, error) {
+	// 返回一个空实现或控制台记录器
+	return struct{}{}, nil
 }
