@@ -8,6 +8,7 @@ import (
 	"github.com/nezhahq/service"
 )
 
+//关闭日志尝试
 var (
 	defaultLogger = &ServiceLogger{enabled: false, logger: service.ConsoleLogger}
 
