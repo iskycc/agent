@@ -4,26 +4,39 @@ import (
 	"fmt"
 	"sync"
 	"time"
-
-	"github.com/nezhahq/service"
 )
 
-//关闭日志尝试，是否会继续调用rsyslog?
 var (
-	defaultLogger = &ServiceLogger{enabled: false, logger: service.ConsoleLogger}
+	defaultLogger = &ServiceLogger{enabled: true, logger: newConsoleLogger()}
 
 	loggerOnce sync.Once
 )
 
-type ServiceLogger struct {
-	enabled bool
-	logger  service.Logger
+// consoleLogger 实现控制台日志输出
+type consoleLogger struct{}
+
+func newConsoleLogger() *consoleLogger {
+	return &consoleLogger{}
 }
 
-func InitDefaultLogger(enabled bool, logger service.Logger) {
+func (c *consoleLogger) Infof(format string, v ...interface{}) {
+	fmt.Printf(format+"\n", v...)
+}
+
+func (c *consoleLogger) Errorf(format string, v ...interface{}) error {
+	msg := fmt.Sprintf(format, v...)
+	fmt.Println(msg)
+	return fmt.Errorf(msg)
+}
+
+type ServiceLogger struct {
+	enabled bool
+	logger  *consoleLogger
+}
+
+func InitDefaultLogger(enabled bool, _ interface{}) {
 	loggerOnce.Do(func() {
 		defaultLogger.enabled = enabled
-		defaultLogger.logger = logger
 	})
 }
 
@@ -47,10 +60,10 @@ func Errorf(format string, v ...interface{}) error {
 	return defaultLogger.Errorf(format, v...)
 }
 
-func NewServiceLogger(enable bool, logger service.Logger) *ServiceLogger {
+func NewServiceLogger(enable bool, _ interface{}) *ServiceLogger {
 	return &ServiceLogger{
 		enabled: enable,
-		logger:  logger,
+		logger:  newConsoleLogger(),
 	}
 }
 
