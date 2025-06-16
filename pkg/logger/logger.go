@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	defaultLogger = &ServiceLogger{enabled: true, logger: service.ConsoleLogger}
+	defaultLogger = &ServiceLogger{enabled: false, logger: service.ConsoleLogger}
 
 	loggerOnce sync.Once
 )
